@@ -5,3 +5,6 @@ obj
 vendor
 .idea
 *.iml
+.swp
+.swo
+.python-version
