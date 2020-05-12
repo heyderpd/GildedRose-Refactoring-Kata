@@ -5,6 +5,7 @@ obj
 vendor
 .idea
 *.iml
-.swp
-.swo
+*.swp
+*.swo
 .python-version
+__pycache__
