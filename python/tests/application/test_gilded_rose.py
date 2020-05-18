@@ -1,85 +1,47 @@
 # -*- coding: utf-8 -*-
-from .base import BaseApplicationTest
+from .base import BaseApplicationTest, ExpectedResult
 
 from gilded_rose import Item, GildedRose
 
 
 class GildedRoseTest(BaseApplicationTest):
 
-    def test_whenCommonItem_qualityAndSellinShouldDecrease(self):
-        item = Item("common", 10, 10)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, name="common", sell_in=9, quality=9)
+    def testCommonItem(self):
+        with self.subTest("whenBeforeExpirationDate_qualityAndSellinShouldDecrease"):
+            self.assertItemAfterUpdate(Item("common", 10, 10), ExpectedResult(9, 9))
 
-    def test_whenPastSellInDate_qualityShouldDecreaseTwiceAsFast(self):
-        item = Item("common", -1, 10)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, name="common", sell_in=-2, quality=8)
+        with self.subTest("whenPastExpirationDate_qualitynShouldDecreaseTwiceAsFast"):
+            self.assertItemAfterUpdate(Item("common", -1, 10), ExpectedResult(-2, 8))
 
-    def test_whenZeroQualityItem_qualityShouldNotDecrease(self):
-        item = Item("common", 0, 0)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, name="common", sell_in=-1, quality=0)
+        with self.subTest("whenZeroQualityItem_qualityShouldNotDecrease"):
+            self.assertItemAfterUpdate(Item("common", 0, 0), ExpectedResult(-1, 0))
 
-    def test_whenAgedBrie_qualityShouldIncrease(self):
-        item = Item("Aged Brie", 1, 1)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, sell_in=0, quality=2)
+    def testAgedBrie(self):
+        with self.subTest("whenBeforeExpirationDate_qualityShouldIncrease"):
+            self.assertItemAfterUpdate(Item("Aged Brie", 1, 1), ExpectedResult(0, 2))
 
-    def test_whenAgedBriePastSellInDate_qualityShouldIncreaseTwiceAsFast(self):
-        item = Item("Aged Brie", 0, 1)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, sell_in=-1, quality=3)
+        with self.subTest("whenPastSellInDate_qualityShouldIncreaseTwiceAsFast"):
+            self.assertItemAfterUpdate(Item("Aged Brie", 0, 1), ExpectedResult(-1,3))
 
-    def test_whenAgedBrieIsMaximunQuality_qualityShouldNotIncrease(self):
-        item = Item("Aged Brie", 0, 50)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, sell_in=-1, quality=50)
+        with self.subTest("whenIsMaximunQuality_qualityShouldNotIncrease"):
+            self.assertItemAfterUpdate(Item("Aged Brie", 0, 50), ExpectedResult(-1,50))
 
-    def test_whenAgedBrieIsMaximunQuality_qualityShouldNotIncrease(self):
-        item = Item("Aged Brie", 0, 50)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, sell_in=-1, quality=50)
+    def testSulfuras(self):
+        with self.subTest("whenBeforeSellInDate_qualityAndSellInShouldNotChange"):
+            self.assertItemAfterUpdate(Item("Sulfuras, Hand of Ragnaros", 10, 10), ExpectedResult(10,10))
 
-    def test_whenSulfuras_qualityAndSellInShouldNotDecrease(self):
-        item = Item("Sulfuras, Hand of Ragnaros", 10, 10)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, sell_in=10, quality=10)
+        with self.subTest("whenPastSellInDate_qualityAndSellinShouldNotChange"):
+            self.assertItemAfterUpdate(Item("Sulfuras, Hand of Ragnaros", 10, 10), ExpectedResult(10,10))
 
-    def test_whenSulfurasPastSellInDate_qualityAndSellinShouldNotDecrease(self):
-        item = Item("Sulfuras, Hand of Ragnaros", 0, 10)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, sell_in=0, quality=10)
+    def testBackstagePass(self):
+        with self.subTest("whenMoreThan10DaysLeft_qualityShouldIncreaseBy1"):
+            self.assertItemAfterUpdate(Item("Backstage passes to a TAFKAL80ETC concert", 11, 1), ExpectedResult(10,2))
 
-    def test_whenBackstagePassMoreThan10DaysLeft_qualityShouldIncreaseBy1(self):
-        item = Item("Backstage passes to a TAFKAL80ETC concert", 11, 1)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, sell_in=10, quality=2)
+        with self.subTest("when10DaysLeftOrLess_qualityShouldIncreaseBy2"):
+            self.assertItemAfterUpdate(Item("Backstage passes to a TAFKAL80ETC concert", 10, 1), ExpectedResult(9,3))
 
-    def test_whenBackstagePass10DaysLeftOrLess_qualityShouldIncreaseBy2(self):
-        item = Item("Backstage passes to a TAFKAL80ETC concert", 10, 1)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, sell_in=9, quality=3)
+        with self.subTest("when5DaysLeftOrLess_qualityShouldIncreaseBy3"):
+            self.assertItemAfterUpdate(Item("Backstage passes to a TAFKAL80ETC concert", 5, 1), ExpectedResult(4,4))
 
-    def test_whenBackstagePass5DaysLeftOrLess_qualityShouldIncreaseBy3(self):
-        item = Item("Backstage passes to a TAFKAL80ETC concert", 5, 1)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, sell_in=4, quality=4)
-
-    def test_whenBackstagePassPastSellInDate_qualityShouldZero(self):
-        item = Item("Backstage passes to a TAFKAL80ETC concert", 0, 5)
-        gilded_rose = GildedRose([item])
-        gilded_rose.update_quality()
-        self.assertItemEqual(item, sell_in=-1, quality=0)
+        with self.subTest("whenPastSellInDate_qualityShouldZero"):
+            self.assertItemAfterUpdate(Item("Backstage passes to a TAFKAL80ETC concert", 0, 5), ExpectedResult(-1,0))
