@@ -18,6 +18,15 @@ class IncreaseQuality(UpdateQuality):
 class DecreaseQuality(UpdateQuality):
     delta = -1
 
+class SetQualityTo(BaseProcessor):
+    target: int
+
+    def __init__(self, target: int):
+        self.target = target
+
+    def process_item(self, item: Item, **kwargs):
+        item.quality = self.target
+
 class CapQuality(BaseProcessor):
 
     cap: int
