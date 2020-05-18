@@ -1,31 +1,23 @@
 from gilded_rose.entities import Item, ItemType
-from gilded_rose.entities.item_wrapper import ItemWrapper
+from gilded_rose.entities.item_runner import ItemRunner
+from gilded_rose.processors.legacy import LegacyProcessor
 
 
-class ItemWrapperFactory:
+class ItemRunnerFactory:
 
     item_map = {
-            ItemType.legendary: [0, 0, None],
-            ItemType.maturable: [1, -1, None]
-        }
-
+        ItemType.legendary: []
+    }
 
     @classmethod
     def from_item(cls, item: Item):
-        item_type = cls._get_type_from_name(item.name) 
-        config = cls.item_map.get(item_type)
+        item_type = cls._get_type_from_name(item.name)
+        processors = cls.item_map.get(item_type)
 
-        if not config:
-            return ItemWrapper(item=item,
-                                item_type=item_type)
+        if not processors:
+            return ItemRunner(item, [LegacyProcessor()])
 
-        return ItemWrapper(
-                item=item,
-                item_type=item_type,
-                quality_velocity=config[0],
-                sell_in_velocity=config[1],
-                updates=config[2],
-            )
+        return ItemRunner(item, processors)
 
     @classmethod
     def _get_type_from_name(cls, name: str) -> ItemType:
