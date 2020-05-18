@@ -16,7 +16,8 @@ class ItemWrapperFactory:
         config = cls.item_map.get(item_type)
 
         if not config:
-            return None
+            return ItemWrapper(item=item,
+                                item_type=item_type)
 
         return ItemWrapper(
                 item=item,

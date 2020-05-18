@@ -22,10 +22,10 @@ class ItemWrapper:
 
     def update_quality(self):
         if self.item.quality < MAXIMUM_QUALITY:
-            self.item.quality = self.item.quality + quality_velocity
+            self.item.quality = self.item.quality + self.quality_velocity
 
     def update_sellin(self):
-        self.item.sell_in = self.item.sell_in + sell_in_velocity
+        self.item.sell_in = self.item.sell_in + self.sell_in_velocity
 
     def update_velocity(self):
         if not self.updates:
@@ -37,3 +37,32 @@ class ItemWrapper:
             updates = [updates]
         for f_update in updates:
             f_update(self)
+
+    def legacy_update(self):
+        if self.item_type not in (ItemType.maturable, ItemType.backstage_pass):
+            if self.item.quality > 0:
+                if self.item_type != ItemType.legendary:
+                    self.item.quality = self.item.quality - 1
+        else:
+            if self.item.quality < MAXIMUM_QUALITY:
+                self.item.quality = self.item.quality + 1
+                if self.item_type == ItemType.backstage_pass:
+                    if self.item.sell_in < 11:
+                        if self.item.quality < MAXIMUM_QUALITY:
+                            self.item.quality = self.item.quality + 1
+                    if self.item.sell_in < 6:
+                        if self.item.quality < MAXIMUM_QUALITY:
+                            self.item.quality = self.item.quality + 1
+        if self.item_type != ItemType.legendary:
+            self.item.sell_in = self.item.sell_in - 1
+        if self.item.sell_in < 0:
+            if self.item_type != ItemType.maturable:
+                if self.item_type != ItemType.backstage_pass:
+                    if self.item.quality > 0:
+                        if self.item_type != ItemType.legendary:
+                            self.item.quality = self.item.quality - 1
+                else:
+                    self.item.quality = self.item.quality - self.item.quality
+            else:
+                if self.item.quality < MAXIMUM_QUALITY:
+                    self.item.quality = self.item.quality + 1
