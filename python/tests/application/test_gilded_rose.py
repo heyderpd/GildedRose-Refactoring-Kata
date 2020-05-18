@@ -45,3 +45,13 @@ class GildedRoseTest(BaseApplicationTest):
 
         with self.subTest("whenPastSellInDate_qualityShouldZero"):
             self.assertItemAfterUpdate(Item("Backstage passes to a TAFKAL80ETC concert", 0, 5), ExpectedResult(-1,0))
+
+    def testConjured(self):
+        with self.subTest("whenBeforeExpirationDate_qualityAndSellinShouldDecreaseTwiceAsFast"):
+            self.assertItemAfterUpdate(Item("Conjured", 10, 10), ExpectedResult(9, 8))
+
+        with self.subTest("whenPastExpirationDate_qualitynShouldDecrease4TimesAsFast"):
+            self.assertItemAfterUpdate(Item("Conjured", -1, 10), ExpectedResult(-2, 6))
+
+        with self.subTest("whenZeroQualityItem_qualityShouldNotDecrease"):
+            self.assertItemAfterUpdate(Item("Conjured", 0, 1), ExpectedResult(-1, 0))

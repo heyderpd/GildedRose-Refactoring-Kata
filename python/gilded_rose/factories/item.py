@@ -11,15 +11,18 @@ class ItemRunnerFactory:
 
     item_map = {
         ItemType.legendary: [],
+
         ItemType.maturable: [IncreaseQuality(),
                              UpdateSellInDate(),
                              WhenPastExpiration(IncreaseQuality()),
                              CapQualityOnMaximum(),
                              QualityIsNeverNegative()],
+
         ItemType.common: [DecreaseQuality(),
                           UpdateSellInDate(),
                           WhenPastExpiration(DecreaseQuality()),
                           QualityIsNeverNegative()],
+
         ItemType.backstage_pass: [IncreaseQuality(),
                                   WhenSellInPast(11, IncreaseQuality()),
                                   WhenSellInPast(6, IncreaseQuality()),
@@ -27,7 +30,12 @@ class ItemRunnerFactory:
                                   WhenPastExpiration(SetQualityTo(0)),
                                   CapQualityOnMaximum(),
                                   QualityIsNeverNegative(),
-                                  ]
+                                  ],
+
+        ItemType.conjured: [DecreaseQuality(2),
+                            UpdateSellInDate(),
+                            WhenPastExpiration(DecreaseQuality(2)),
+                            QualityIsNeverNegative()]
     }
 
     @classmethod

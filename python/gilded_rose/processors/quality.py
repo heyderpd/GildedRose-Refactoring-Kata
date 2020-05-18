@@ -12,11 +12,13 @@ class UpdateQuality(BaseProcessor):
 
 
 class IncreaseQuality(UpdateQuality):
-    delta = 1
+    def __init__(self, delta: int = 1):
+        self.delta = delta
 
 
 class DecreaseQuality(UpdateQuality):
-    delta = -1
+    def __init__(self, delta: int = 1):
+        self.delta = delta * -1
 
 class SetQualityTo(BaseProcessor):
     target: int
