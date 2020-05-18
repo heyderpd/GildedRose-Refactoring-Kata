@@ -2,7 +2,7 @@ from gilded_rose.entities import Item, ItemType
 from gilded_rose.entities.item_runner import ItemRunner
 
 from gilded_rose.processors.legacy import LegacyProcessor
-from gilded_rose.processors.quality import IncreaseQuality, CapQualityOnMaximum, QualityIsNeverNegative
+from gilded_rose.processors.quality import IncreaseQuality, DecreaseQuality, CapQualityOnMaximum, QualityIsNeverNegative
 from gilded_rose.processors.conditional import WhenPastExpiration
 from gilded_rose.processors.sell_in import UpdateSellInDate
 
@@ -15,7 +15,11 @@ class ItemRunnerFactory:
                              UpdateSellInDate(),
                              WhenPastExpiration(IncreaseQuality()),
                              CapQualityOnMaximum(),
-                             QualityIsNeverNegative()]
+                             QualityIsNeverNegative()],
+        ItemType.common: [DecreaseQuality(),
+                          UpdateSellInDate(),
+                          WhenPastExpiration(DecreaseQuality()),
+                          QualityIsNeverNegative()]
     }
 
     @classmethod

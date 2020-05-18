@@ -15,7 +15,7 @@ class IncreaseQuality(UpdateQuality):
     delta = 1
 
 
-class DecreaseQuality(BaseProcessor):
+class DecreaseQuality(UpdateQuality):
     delta = -1
 
 class CapQuality(BaseProcessor):
