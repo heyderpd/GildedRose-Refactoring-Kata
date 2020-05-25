@@ -9,7 +9,7 @@ from gilded_rose.processors.sell_in import UpdateSellInDate
 
 class ItemRunnerFactory:
 
-    item_map = {
+    item_behaviour = {
         ItemType.legendary: [],
 
         ItemType.maturable: [IncreaseQuality(),
@@ -29,8 +29,7 @@ class ItemRunnerFactory:
                                   UpdateSellInDate(),
                                   WhenPastExpiration(SetQualityTo(0)),
                                   CapQualityOnMaximum(),
-                                  QualityIsNeverNegative(),
-                                  ],
+                                  QualityIsNeverNegative()],
 
         ItemType.conjured: [DecreaseQuality(2),
                             UpdateSellInDate(),
@@ -41,10 +40,7 @@ class ItemRunnerFactory:
     @classmethod
     def from_item(cls, item: Item):
         item_type = cls._get_type_from_name(item.name)
-        processors = cls.item_map.get(item_type)
-
-        if not processors:
-            return ItemRunner(item, [LegacyProcessor()])
+        processors = cls.item_behaviour.get(item_type)
 
         return ItemRunner(item, processors)
 
