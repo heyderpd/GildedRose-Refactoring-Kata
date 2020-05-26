@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from typing import List
+from .entities import Item
+from .update import update
 
-from gilded_rose.update import update
 
 class GildedRose(object):
 

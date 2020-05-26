@@ -1,42 +1,44 @@
 from craftsmen import identity, rcompose
 
 from .operators import IncreaseQuality, DecreaseQuality, CapQualityOnMaximum, QualityIsNeverNegative, SetQualityTo, WhenPastExpiration, WhenSellInPast, UpdateSellInDate
+from ..entities import constants
 
-maturable = rcompose([
+
+maturable = rcompose(
   IncreaseQuality(1),
-  UpdateSellInDate(),
+  UpdateSellInDate,
   WhenPastExpiration(IncreaseQuality(1)),
-  CapQualityOnMaximum(),
-  QualityIsNeverNegative(),
-])
+  CapQualityOnMaximum(constants.MAXIMUM_QUALITY),
+  QualityIsNeverNegative(0),
+)
 
 legendary = identity
 
-backstage_pass = rcompose([
+backstage_pass = rcompose(
   IncreaseQuality(1),
   WhenSellInPast(11, IncreaseQuality(1)),
   WhenSellInPast(6, IncreaseQuality(1)),
-  UpdateSellInDate(),
+  UpdateSellInDate,
   WhenPastExpiration(SetQualityTo(0)),
-  CapQualityOnMaximum(),
-  QualityIsNeverNegative(),
-])
+  CapQualityOnMaximum(constants.MAXIMUM_QUALITY),
+  QualityIsNeverNegative(0),
+)
 
-conjured = rcompose([
+conjured = rcompose(
   DecreaseQuality(2),
-  UpdateSellInDate(),
+  UpdateSellInDate,
   WhenPastExpiration(DecreaseQuality(2)),
-  QualityIsNeverNegative(),
-])
+  QualityIsNeverNegative(0),
+)
 
-common = rcompose([
+common = rcompose(
   DecreaseQuality(1),
-  UpdateSellInDate(),
+  UpdateSellInDate,
   WhenPastExpiration(DecreaseQuality(1)),
-  QualityIsNeverNegative(),
-])
+  QualityIsNeverNegative(0),
+)
 
-def update(self, item):
+def update(item):
   if item.name == "Aged Brie":
       return maturable(item)
   if item.name == "Sulfuras, Hand of Ragnaros":
