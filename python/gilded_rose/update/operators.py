@@ -1,8 +1,11 @@
 from craftsmen import curry
 
 
+def __setQuality(delta, item):
+  item.quality = delta
+
 def __sumValueWithQuality(delta, item):
-  item.quality += delta
+  __setQuality(item.quality + delta, item)
 
 def __increaseQuality(delta, item):
   __sumValueWithQuality(delta, item)
@@ -12,7 +15,7 @@ def __decreaseQuality(delta, item):
 
 def __capQualityOnMaximum(maximum, item):
   if item.quality > maximum:
-      item.quality = maximum
+    __setQuality(maximum, item)
 
 
 IncreaseQuality = curry(__increaseQuality)
