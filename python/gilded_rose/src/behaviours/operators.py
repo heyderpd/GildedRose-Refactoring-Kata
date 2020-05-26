@@ -5,6 +5,7 @@ from ..entities import constants
 
 def __setQuality(value, item):
   item.quality = value
+  return item
 
 def __sumValueWithQuality(value, item):
   __setQuality(item.quality + value, item)
@@ -31,9 +32,10 @@ def __setLowerLimit(limit, item):
 
 def __setSellIn(value, item):
   item.sell_in = value
+  return item
 
-def __whenSellInLowerThan(limit, processor, item):
-  if item.sell_in < limit:
+def __whenSellInEqualOrLowerThan(limit, processor, item):
+  if item.sell_in <= limit:
     processor(item)
   return item
 
@@ -47,11 +49,11 @@ IncreaseQualityBy = curry(__increaseQuality)
 DecreaseQualityBy = curry(__decreaseQuality)
 SetTopLimitOnQuality = curry(__setTopLimit)
 SetLowerLimitOnQuality = curry(__setLowerLimit)
-WhenSellInLowerThan = curry(__whenSellInLowerThan)
+WhenSellInEqualOrLowerThan = curry(__whenSellInEqualOrLowerThan)
 UpdateSellIn = curry(__updateSellInDate)
 
 
-WhenExpiration = WhenSellInLowerThan(0)
+WhenExpiration = WhenSellInEqualOrLowerThan(0)
 SetQualityToZero = SetQualityTo(0)
 IncreaseQualityByOne = IncreaseQualityBy(1)
 DecreaseQualityByOne = DecreaseQualityBy(1)

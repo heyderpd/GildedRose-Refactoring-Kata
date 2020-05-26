@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from .entities import Item
-from .update import update
+from .src.entities import Item
+from .src import update
 
 
 class GildedRose(object):
@@ -9,5 +9,4 @@ class GildedRose(object):
         self.items = items
 
     def update_quality(self):
-        for item in self.items:
-            update(item)
+        list(map(update, self.items))
