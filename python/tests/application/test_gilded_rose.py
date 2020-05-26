@@ -8,13 +8,13 @@ class GildedRoseTest(BaseApplicationTest):
 
     def testCommonItem(self):
         with self.subTest("whenBeforeExpirationDate_qualityAndSellinShouldDecrease"):
-            self.assertItemAfterUpdate(Item("common", 10, 10), ExpectedResult(9, 9))
+            self.assertItemAfterUpdate(Item("+1 Dexterity Vest", 10, 10), ExpectedResult(9, 9))
 
         with self.subTest("whenPastExpirationDate_qualitynShouldDecreaseTwiceAsFast"):
-            self.assertItemAfterUpdate(Item("common", -1, 10), ExpectedResult(-2, 8))
+            self.assertItemAfterUpdate(Item("+3 Dexterity Vest", -1, 10), ExpectedResult(-2, 8))
 
         with self.subTest("whenZeroQualityItem_qualityShouldNotDecrease"):
-            self.assertItemAfterUpdate(Item("common", 0, 0), ExpectedResult(-1, 0))
+            self.assertItemAfterUpdate(Item("+5 Dexterity Vest", 0, 0), ExpectedResult(-1, 0))
 
     def testAgedBrie(self):
         with self.subTest("whenBeforeExpirationDate_qualityShouldIncrease"):
@@ -28,7 +28,7 @@ class GildedRoseTest(BaseApplicationTest):
 
     def testSulfuras(self):
         with self.subTest("whenBeforeSellInDate_qualityAndSellInShouldNotChange"):
-            self.assertItemAfterUpdate(Item("Sulfuras, Hand of Ragnaros", 10, 10), ExpectedResult(10, 10))
+            self.assertItemAfterUpdate(Item("Sulfuras, Foot of Ragnaros", 10, 10), ExpectedResult(10, 10))
 
         with self.subTest("whenPastSellInDate_qualityAndSellinShouldNotChange"):
             self.assertItemAfterUpdate(Item("Sulfuras, Hand of Ragnaros", 10, 10), ExpectedResult(10, 10))
@@ -38,20 +38,20 @@ class GildedRoseTest(BaseApplicationTest):
             self.assertItemAfterUpdate(Item("Backstage passes to a TAFKAL80ETC concert", 11, 1), ExpectedResult(10, 2))
 
         with self.subTest("when10DaysLeftOrLess_qualityShouldIncreaseBy2"):
-            self.assertItemAfterUpdate(Item("Backstage passes to a TAFKAL80ETC concert", 10, 1), ExpectedResult(9, 3))
+            self.assertItemAfterUpdate(Item("Backstage passes to a Xalala", 10, 1), ExpectedResult(9, 3))
 
         with self.subTest("when5DaysLeftOrLess_qualityShouldIncreaseBy3"):
-            self.assertItemAfterUpdate(Item("Backstage passes to a TAFKAL80ETC concert", 5, 1), ExpectedResult(4, 4))
+            self.assertItemAfterUpdate(Item("Backstage passes to a Xablau", 5, 1), ExpectedResult(4, 4))
 
         with self.subTest("whenPastSellInDate_qualityShouldZero"):
-            self.assertItemAfterUpdate(Item("Backstage passes to a TAFKAL80ETC concert", 0, 5), ExpectedResult(-1, 0))
+            self.assertItemAfterUpdate(Item("Backstage passes to a Undefined", 0, 5), ExpectedResult(-1, 0))
 
     def testConjured(self):
         with self.subTest("whenBeforeExpirationDate_qualityAndSellinShouldDecreaseTwiceAsFast"):
-            self.assertItemAfterUpdate(Item("Conjured", 10, 10), ExpectedResult(9, 8))
+            self.assertItemAfterUpdate(Item("Conjured Mana Cake", 10, 10), ExpectedResult(9, 8))
 
         with self.subTest("whenPastExpirationDate_qualitynShouldDecrease4TimesAsFast"):
-            self.assertItemAfterUpdate(Item("Conjured", -1, 10), ExpectedResult(-2, 6))
+            self.assertItemAfterUpdate(Item("Conjured Mana Pizza", -1, 10), ExpectedResult(-2, 6))
 
         with self.subTest("whenZeroQualityItem_qualityShouldNotDecrease"):
-            self.assertItemAfterUpdate(Item("Conjured", 0, 1), ExpectedResult(-1, 0))
+            self.assertItemAfterUpdate(Item("Conjured Mana Coffe", 0, 1), ExpectedResult(-1, 0))

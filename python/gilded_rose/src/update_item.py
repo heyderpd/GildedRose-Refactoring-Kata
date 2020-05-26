@@ -12,7 +12,6 @@ item_behaviour = {
 }
 
 def getIdentifier(item):
-
   if 'Sulfuras' in item.name:
     return constants.LEGENDARY
   if item.name == 'Aged Brie':
