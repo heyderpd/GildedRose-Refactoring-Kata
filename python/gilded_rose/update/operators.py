@@ -13,22 +13,25 @@ def __increaseQuality(delta, item):
 def __decreaseQuality(delta, item):
   __sumValueWithQuality(-1 * delta, item)
 
-def __capQualityOnMaximum(maximum, item):
-  if item.quality > maximum:
-    __setQuality(maximum, item)
+def __setTopLimit(limit, item):
+  if item.quality > limit:
+    __setQuality(limit, item)
+
+def __setLowerLimit(limit, item):
+  if item.quality < limit:
+    __setQuality(limit, item)
 
 
 IncreaseQuality = curry(__increaseQuality)
 
 DecreaseQuality = curry(__decreaseQuality)
 
-CapQualityOnMaximum = curry(__capQualityOnMaximum)
+CapQualityOnMaximum = curry(__setTopLimit)
 
-def QualityIsNeverNegative():
-  pass
+QualityIsNeverNegative = curry(__setLowerLimit)
 
-def SetQualityTo():
-  pass
+SetQualityTo = curry(__setQuality)
+
 
 def WhenPastExpiration():
   pass
