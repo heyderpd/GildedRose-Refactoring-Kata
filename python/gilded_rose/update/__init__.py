@@ -1,41 +1,49 @@
 from craftsmen import identity, rcompose
 
-from .operators import IncreaseQuality, DecreaseQuality, CapQualityOnMaximum, QualityIsNeverNegative, SetQualityTo, WhenPastExpiration, WhenSellInPast, UpdateSellInDate
+from .operators import IncreaseQualityByOne, DecreaseQualityByOne, UpdateSellIn, WhenExpiration, LimitMaximumValueOfQuality, DecreaseQualityBy, WhenSellInLowerThan, SetQualityToZero, QualityIsNeverNegative
 from ..entities import constants
 
 
 maturable = rcompose(
-  IncreaseQuality(1),
-  UpdateSellInDate,
-  WhenPastExpiration(IncreaseQuality(1)),
-  CapQualityOnMaximum(constants.MAXIMUM_QUALITY),
-  QualityIsNeverNegative(0),
+  IncreaseQualityByOne,
+  UpdateSellIn,
+  WhenExpiration(IncreaseQualityByOne),
+  LimitMaximumValueOfQuality,
+  QualityIsNeverNegative,
+)
+
+maturable = rcompose(
+  IncreaseQualityByOne,
+  UpdateSellIn,
+  WhenExpiration(IncreaseQualityByOne),
+  LimitMaximumValueOfQuality,
+  QualityIsNeverNegative,
 )
 
 legendary = identity
 
 backstage_pass = rcompose(
-  IncreaseQuality(1),
-  WhenSellInPast(11, IncreaseQuality(1)),
-  WhenSellInPast(6, IncreaseQuality(1)),
-  UpdateSellInDate,
-  WhenPastExpiration(SetQualityTo(0)),
-  CapQualityOnMaximum(constants.MAXIMUM_QUALITY),
-  QualityIsNeverNegative(0),
+  IncreaseQualityByOne,
+  WhenSellInLowerThan(11, IncreaseQualityByOne),
+  WhenSellInLowerThan(6, IncreaseQualityByOne),
+  UpdateSellIn,
+  WhenExpiration(SetQualityToZero),
+  LimitMaximumValueOfQuality,
+  QualityIsNeverNegative,
 )
 
 conjured = rcompose(
-  DecreaseQuality(2),
-  UpdateSellInDate,
-  WhenPastExpiration(DecreaseQuality(2)),
-  QualityIsNeverNegative(0),
+  DecreaseQualityBy(2),
+  UpdateSellIn,
+  WhenExpiration(DecreaseQualityBy(2)),
+  QualityIsNeverNegative,
 )
 
 common = rcompose(
-  DecreaseQuality(1),
-  UpdateSellInDate,
-  WhenPastExpiration(DecreaseQuality(1)),
-  QualityIsNeverNegative(0),
+  DecreaseQualityByOne,
+  UpdateSellIn,
+  WhenExpiration(DecreaseQualityByOne),
+  QualityIsNeverNegative,
 )
 
 def update(item):
