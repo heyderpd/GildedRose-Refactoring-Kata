@@ -21,6 +21,17 @@ def __setLowerLimit(limit, item):
   if item.quality < limit:
     __setQuality(limit, item)
 
+def __whenPastExpiration(processor, item):
+  limit = 0
+  WhenSellInPast(limit, processor, item)
+
+def __whenSellInPast(limit, processor, item):
+  if item.sell_in < limit:
+    processor(item)
+
+def __updateSellInDate(item):
+  item.sell_in = item.sell_in -1
+
 
 IncreaseQuality = curry(__increaseQuality)
 
@@ -32,12 +43,8 @@ QualityIsNeverNegative = curry(__setLowerLimit)
 
 SetQualityTo = curry(__setQuality)
 
+WhenPastExpiration = curry(__whenPastExpiration)
 
-def WhenPastExpiration():
-  pass
+WhenSellInPast = curry(__whenSellInPast)
 
-def WhenSellInPast():
-  pass
-
-def UpdateSellInDate():
-  pass
+UpdateSellInDate = curry(__updateSellInDate)
