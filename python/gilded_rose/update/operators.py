@@ -37,7 +37,7 @@ def __updateSellInDate(item):
   __setSellIn(-1, item)
 
 
-IncreaseQuality = curry(__increaseQuality)
+IncreaseQuality = curry(__increaseQuality)(p)
 
 DecreaseQuality = curry(__decreaseQuality)
 
