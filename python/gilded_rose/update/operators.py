@@ -1,5 +1,7 @@
 from craftsmen import curry
 
+from ..entities import constants
+
 
 def __setQuality(value, item):
   item.quality = value
@@ -30,12 +32,7 @@ def __setLowerLimit(limit, item):
 def __setSellIn(value, item):
   item.sell_in = value
 
-def __whenPastExpiration(processor, item):
-  limit = 0
-  WhenSellInPast(limit, processor, item)
-  return item
-
-def __whenSellInPast(limit, processor, item):
+def __whenSellInLowerThan(limit, processor, item):
   if item.sell_in < limit:
     processor(item)
   return item
@@ -45,19 +42,18 @@ def __updateSellInDate(item):
   return item
 
 
-IncreaseQuality = curry(__increaseQuality)
-
-DecreaseQuality = curry(__decreaseQuality)
-
-CapQualityOnMaximum = curry(__setTopLimit)
-
-QualityIsNeverNegative = curry(__setLowerLimit)
-
 SetQualityTo = curry(__setQuality)
+IncreaseQualityBy = curry(__increaseQuality)
+DecreaseQualityBy = curry(__decreaseQuality)
+SetTopLimitOnQuality = curry(__setTopLimit)
+SetLowerLimitOnQuality = curry(__setLowerLimit)
+WhenSellInLowerThan = curry(__whenSellInLowerThan)
+UpdateSellIn = curry(__updateSellInDate)
 
-WhenPastExpiration = curry(__whenPastExpiration)
 
-WhenSellInPast = curry(__whenSellInPast)
-
-UpdateSellInDate = curry(__updateSellInDate)
-
+WhenExpiration = WhenSellInLowerThan(0)
+SetQualityToZero = SetQualityTo(0)
+IncreaseQualityByOne = IncreaseQualityBy(1)
+DecreaseQualityByOne = DecreaseQualityBy(1)
+LimitMaximumValueOfQuality = SetTopLimitOnQuality(constants.MAXIMUM_QUALITY)
+QualityIsNeverNegative = SetLowerLimitOnQuality(0)
